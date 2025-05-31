@@ -51,13 +51,13 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://apis.davidcyriltech.my.id/ai/gpt4?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://api.nekorinn.my.id/ai/ai4chat?text=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
-            const response = data?.message || data?.description || data?.reponse || data;
+            const response = data?.message || data?.description || data?.result || data;
 
             if (response) {
                 const styledResponse = applyFont(response.toString());
