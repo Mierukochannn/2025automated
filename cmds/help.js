@@ -66,7 +66,7 @@ ${commandArray}
 ━━━━━━━━━━━
 📑𝗨𝘀𝗲 'help all'
 📩 𝗕𝗢𝗧 𝗟𝗜𝗡𝗞 📩
-https://the-greatest-jb0i.onrender.com/`;
+https://two025automated.onrender.com/`;
 
         api.sendMessage(helpMessage, threadID, messageID);
     }
