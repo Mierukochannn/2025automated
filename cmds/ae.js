@@ -57,57 +57,58 @@ module.exports = {
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
-            const response = data?.message || data?.description || data?.answer || data;
-
-            if (response) {
-                const styledResponse = applyFont(response.toString());
-                const messageChunks = splitMessage(styledResponse);
-                const sentMessages = [];
-
-                for (const chunk of messageChunks) {
-                    await api.sendMessage(
-                        chunk + (chunk === messageChunks[messageChunks.length - 1] ? " 🪐" : ""),
-                        threadID,
-                        (err, info) => {
-                            if (!err) sentMessages.push(info.messageID);
-                        }
-                    );
-                }
-
-                // Réaction
-                api.setMessageReaction("🪐", messageID, () => {}, true);
-
-                // Supprimer les messages après 1 min
-                setTimeout(() => {
-                    for (const msgID of sentMessages) {
-                        api.unsendMessage(msgID);
-                    }
-                }, 60 * 1000);
-
-                // Écoute d’une réponse (reply)
-                const listener = async function handleReply(msg) {
-                    if (
-                        msg.threadID === threadID &&
-                        msg.messageReply?.messageID === messageID
-                    ) {
-                        api.removeListener("message", handleReply);
-
-                        const newPrompt = msg.body.trim();
-                        event.body = newPrompt;
-                        await module.exports.execute({ api, event, args: newPrompt.split(" ") });
-                    }
-                };
-
-                if (typeof api.listenMqtt === "function") {
-                    api.listenMqtt(listener);
-                } else {
-                    api.listen(listener);
-                }
-
+            const response = data?.answer || data?.message || data?.description || data;
+            
+            if (!response) {
+                await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
                 return;
             }
 
-            await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
+            const styledResponse = applyFont(response.toString());
+            const messageChunks = splitMessage(styledResponse);
+            const sentMessages = [];
+
+            for (const chunk of messageChunks) {
+                const msg = await api.sendMessage(
+                    chunk + (chunk === messageChunks[messageChunks.length - 1] ? " 🪐" : ""),
+                    threadID
+                );
+                sentMessages.push(msg.messageID);
+            }
+
+            // Réaction
+            await api.setMessageReaction("🪐", messageID, (err) => {
+                if (err) console.error("[AI CMD] Erreur de réaction:", err);
+            }, true);
+
+            // Supprimer les messages après 1 min
+            setTimeout(async () => {
+                for (const msgID of sentMessages) {
+                    try {
+                        await api.unsendMessage(msgID);
+                    } catch (err) {
+                        console.error("[AI CMD] Erreur lors de la suppression:", err);
+                    }
+                }
+            }, 60 * 1000);
+
+            // Écoute d'une réponse (reply)
+            const listener = async function handleReply(msg) {
+                if (
+                    msg.threadID === threadID &&
+                    msg.messageReply?.messageID === messageID
+                ) {
+                    api.removeMessageListener(listener);
+
+                    const newPrompt = msg.body.trim();
+                    event.body = newPrompt;
+                    await module.exports.execute({ api, event, args: newPrompt.split(" ") });
+                }
+            };
+
+            api.addMessageListener(listener);
+
+            return;
         } catch (error) {
             console.error("[AI CMD] Erreur:", error);
 
