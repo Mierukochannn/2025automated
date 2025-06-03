@@ -51,13 +51,13 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://api.ryzumi.vip/api/ai/deepseek?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://api.nekorinn.my.id/ai/copilot?text=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
-            const response = data?.answer || data?.message || data?.description || data;
+            const response = data?.result?.text || data?.message || data?.description || data;
             
             if (!response) {
                 await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
