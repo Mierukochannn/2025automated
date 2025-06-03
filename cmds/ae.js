@@ -34,7 +34,7 @@ module.exports = {
     name: "ai",
     usePrefix: false,
     usage: "ai <question>",
-    version: "1.5",
+    version: "1.7",
     author: "Aesther",
     admin: false,
     cooldown: 2,
@@ -51,13 +51,13 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://api.nekorinn.my.id/ai/ai4chat?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://api.ryzumi.vip/api/ai/deepseek?text=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
-            const response = data?.message || data?.description || data?.result || data;
+            const response = data?.message || data?.description || data?.answer || data;
 
             if (response) {
                 const styledResponse = applyFont(response.toString());
