@@ -57,7 +57,8 @@ module.exports = {
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
-            const response = data?.result?.text || data?.message || data?.description || data;
+            // Utilisation de la structure de réponse fournie
+            const response = data?.result?.text || "Je n'ai pas pu obtenir de réponse.";
             
             if (!response) {
                 await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
