@@ -16,7 +16,7 @@ const stickers = [
     "2379551785402892", "254597059336998"
 ];
 
-const RP = "Répond bien à cette question et ajoute des Emoji convenables";
+const RP = "Réponds à cette question et ajoute des emojis convenables pour l'améliorer les réponse. N'ajoute pas de commentaire ";
 
 function applyFont(text) {
     return text.split('').map(char => fonts[char] || char).join('');
@@ -51,14 +51,14 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://api.nekorinn.my.id/ai/copilot?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://fastrestapis.fasturl.cloud/aillm/gpt-4?ask=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
             console.log("[AI CMD] API Response:", data);
 
             // Utilisation de la structure de réponse fournie
-            const response = data?.result?.text || "Je n'ai pas pu obtenir de réponse.";
+            const response = data?.result || "Je n'ai pas pu obtenir de réponse.";
             
             if (!response) {
                 await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
