@@ -51,7 +51,7 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://api.nekorinn.my.id/ai/ai4chat?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://aryanapi.up.railway.app/api/conciseai?prompt=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
