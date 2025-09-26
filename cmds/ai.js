@@ -33,7 +33,7 @@ module.exports = {
         try {
             const loadingMsg = await api.sendMessage(applyFont("(๑·`▱´·๑)"), threadID);
             
-            const apiUrl = `https://api.nekorinn.my.id/ai/gemma-3-27b?text=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://aryanapi.up.railway.app/api/conciseai?prompt=${encodeURIComponent(RP + " : " + prompt)}`;
             const { data } = await axios.get(apiUrl);
             const response = data?.result || data?.description || data?.reponse || data;
             
