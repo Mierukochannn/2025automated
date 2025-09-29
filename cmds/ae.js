@@ -51,7 +51,7 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://aryanapi.up.railway.app/api/deepseek3?prompt=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://aryanapi.up.railway.app/api/deepchat?prompt=${encodeURIComponent(RP + " : " + prompt)}`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
