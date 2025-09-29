@@ -58,7 +58,7 @@ module.exports = {
             console.log("[AI CMD] API Response:", data);
 
             // Utilisation de la structure de réponse fournie
-            const response = data?.result || "Je n'ai pas pu obtenir de réponse.";
+            const response = data?.data || "Je n'ai pas pu obtenir de réponse.";
             
             if (!response) {
                 await api.sendMessage(applyFont("⚠️ L'API n'a pas retourné de réponse valide."), threadID);
