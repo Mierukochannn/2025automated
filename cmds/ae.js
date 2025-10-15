@@ -51,7 +51,7 @@ module.exports = {
 
         console.log(`[AI CMD] Prompt: ${prompt}`);
         try {
-            const apiUrl = `https://aryanapi.up.railway.app/api/deepchat?prompt=${encodeURIComponent(RP + " : " + prompt)}`;
+            const apiUrl = `https://api-library-kohi.onrender.com/api/deepseek?prompt=${encodeURIComponent(RP + " : " + prompt)}&user=`;
             console.log(`[AI CMD] Calling API: ${apiUrl}`);
 
             const { data } = await axios.get(apiUrl, { timeout: 15000 });
